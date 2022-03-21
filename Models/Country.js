@@ -1,0 +1,300 @@
+
+class Country{
+    _countryName;
+    _dialCode;
+    _code;
+    _regexp;
+    constructor(countryCode) {
+        const country = Country.getCountryByCode(countryCode);
+
+        this._countryName = country.name;
+        this._dialCode = country.dial_code;
+        this._code = country.code;
+        this._regexp = country.regexp;
+    }
+    
+    get countryName(){
+        return this._countryName;
+    }
+
+    get dialCode(){
+        return this._dialCode;
+    }
+
+    get code() {
+        return this._code;
+    }
+
+    get regexp(){
+        return new RegExp(this._regexp);
+    }
+
+    static getCountryByCode(countryCode) {
+        if(countryCode?.length !== 2) return "Country code is not valid input.";
+        const input = countryCode.toUpperCase();
+        for (let i = 0; i < COUNTRIES.length; i++) {
+            const country = COUNTRIES[i];
+            if(country.code.toUpperCase() === input) {
+                return country;
+            }
+        }
+        return `No country with code ${countryCode} has been found.`;
+    }
+    static getRegExpByCode(countryCode){
+        const country = Country.getCountryByCode(countryCode);
+        if(country?.regexp)
+            return new RegExp(country.regexp);
+        return `Faild to retrieve regexp from ${country.name}`;        
+    }
+    static getDialCodeByCode(countryCode){
+        const country = Country.getCountryByCode(countryCode);
+        if(country?.dial_code)
+            return country.dial_code;
+        return `Faild to retrieve dial code from ${country.name}`;        
+    }
+}
+const COUNTRIES = [
+    {"name":"Afghanistan","dial_code":"+93","code":"AF"},
+    {"name":"Aland Islands","dial_code":"+358","code":"AX","regexp":"22d{3}"},
+    {"name":"Albania","dial_code":"+355","code":"AL"},
+    {"name":"Algeria","dial_code":"+213","code":"DZ","regexp":"d{5}"},
+    {"name":"AmericanSamoa","dial_code":"+1684","code":"AS","regexp":"96799"},
+    {"name":"Andorra","dial_code":"+376","code":"AD","regexp":"ADd{3}"},
+    {"name":"Angola","dial_code":"+244","code":"AO"},
+    {"name":"Anguilla","dial_code":"+1264","code":"AI"},
+    {"name":"Antarctica","dial_code":"+672","code":"AQ"},
+    {"name":"Antigua and Barbuda","dial_code":"+1268","code":"AG"},
+    {"name":"Argentina","dial_code":"+54","code":"AR","regexp":"([A-HJ-NP-Z])?d{4}([A-Z]{3})?"},
+    {"name":"Armenia","dial_code":"+374","code":"AM","regexp":"(37)?d{4}"},
+    {"name":"Aruba","dial_code":"+297","code":"AW"},
+    {"name":"Australia","dial_code":"+61","code":"AU","regexp":"d{4}"},
+    {"name":"Austria","dial_code":"+43","code":"AT","regexp":"d{4}"},
+    {"name":"Azerbaijan","dial_code":"+994","code":"AZ","regexp":"d{4}"},
+    {"name":"Bahamas","dial_code":"+1242","code":"BS"},
+    {"name":"Bahrain","dial_code":"+973","code":"BH","regexp":"((1[0-2]|[2-9])d{2})?"},
+    {"name":"Bangladesh","dial_code":"+880","code":"BD","regexp":"d{4}"},
+    {"name":"Barbados","dial_code":"+1246","code":"BB","regexp":"(BBd{5})?"},
+    {"name":"Belarus","dial_code":"+375","code":"BY","regexp":"d{6}"},
+    {"name":"Belgium","dial_code":"+32","code":"BE","regexp":"d{4}"},
+    {"name":"Belize","dial_code":"+501","code":"BZ"},
+    {"name":"Benin","dial_code":"+229","code":"BJ"},
+    {"name":"Bermuda","dial_code":"+1441","code":"BM","regexp":"[A-Z]{2}[ ]?[A-Z0-9]{2}"},
+    {"name":"Bhutan","dial_code":"+975","code":"BT"},
+    {"name":"Bolivia, Plurinational State of","dial_code":"+591","code":"BO"},
+    {"name":"Bosnia and Herzegovina","dial_code":"+387","code":"BA","regexp":"d{5}"},
+    {"name":"Botswana","dial_code":"+267","code":"BW"},
+    {"name":"Brazil","dial_code":"+55","code":"BR","regexp":"d{5}[-]?d{3}"},
+    {"name":"British Indian Ocean Territory","dial_code":"+246","code":"IO","regexp":"BBND 1ZZ"},
+    {"name":"Brunei Darussalam","dial_code":"+673","code":"BN","regexp":"[A-Z]{2}[ ]?d{4}"},
+    {"name":"Bulgaria","dial_code":"+359","code":"BG","regexp":"d{4}"},
+    {"name":"Burkina Faso","dial_code":"+226","code":"BF"},
+    {"name":"Burundi","dial_code":"+257","code":"BI"},
+    {"name":"Cambodia","dial_code":"+855","code":"KH","regexp":"d{5}"},
+    {"name":"Cameroon","dial_code":"+237","code":"CM"},
+    {"name":"Canada","dial_code":"+1","code":"CA","regexp":"[ABCEGHJKLMNPRSTVXY]d[ABCEGHJ-NPRSTV-Z][ ]?d[ABCEGHJ-NPRSTV-Z]d"},
+    {"name":"Cape Verde","dial_code":"+238","code":"CV","regexp":"d{4}"},
+    {"name":"Cayman Islands","dial_code":"+ 345","code":"KY"},
+    {"name":"Central African Republic","dial_code":"+236","code":"CF"},
+    {"name":"Chad","dial_code":"+235","code":"TD"},
+    {"name":"Chile","dial_code":"+56","code":"CL","regexp":"d{7}"},
+    {"name":"China","dial_code":"+86","code":"CN","regexp":"d{6}"},
+    {"name":"Christmas Island","dial_code":"+61","code":"CX","regexp":"6798"},
+    {"name":"Cocos (Keeling) Islands","dial_code":"+61","code":"CC","regexp":"6799"},
+    {"name":"Colombia","dial_code":"+57","code":"CO"},
+    {"name":"Comoros","dial_code":"+269","code":"KM"},
+    {"name":"Congo","dial_code":"+242","code":"CG"},
+    {"name":"Congo, The Democratic Republic of the Congo","dial_code":"+243","code":"CD"},
+    {"name":"Cook Islands","dial_code":"+682","code":"CK","regexp":"d{4}"},
+    {"name":"Costa Rica","dial_code":"+506","code":"CR","regexp":"d{4,5}|d{3}-d{4}"},
+    {"name":"Cote d'Ivoire","dial_code":"+225","code":"CI"},
+    {"name":"Croatia","dial_code":"+385","code":"HR","regexp":"d{5}"},
+    {"name":"Cuba","dial_code":"+53","code":"CU"},
+    {"name":"Cyprus","dial_code":"+357","code":"CY","regexp":"d{4}"},
+    {"name":"Czech Republic","dial_code":"+420","code":"CZ","regexp":"d{3}[ ]?d{2}"},
+    {"name":"Denmark","dial_code":"+45","code":"DK","regexp":"d{4}"},
+    {"name":"Djibouti","dial_code":"+253","code":"DJ"},
+    {"name":"Dominica","dial_code":"+1767","code":"DM"},
+    {"name":"Dominican Republic","dial_code":"+1849","code":"DO","regexp":"d{5}"},
+    {"name":"Ecuador","dial_code":"+593","code":"EC","regexp":"([A-Z]d{4}[A-Z]|(?:[A-Z]{2})?d{6})?"},
+    {"name":"Egypt","dial_code":"+20","code":"EG","regexp":"d{5}"},
+    {"name":"El Salvador","dial_code":"+503","code":"SV"},
+    {"name":"Equatorial Guinea","dial_code":"+240","code":"GQ"},
+    {"name":"Eritrea","dial_code":"+291","code":"ER"},
+    {"name":"Estonia","dial_code":"+372","code":"EE","regexp":"d{5}"},
+    {"name":"Ethiopia","dial_code":"+251","code":"ET","regexp":"d{4}"},
+    {"name":"Falkland Islands (Malvinas)","dial_code":"+500","code":"FK","regexp":"FIQQ 1ZZ"},
+    {"name":"Faroe Islands","dial_code":"+298","code":"FO","regexp":"d{3}"},
+    {"name":"Fiji","dial_code":"+679","code":"FJ"},
+    {"name":"Finland","dial_code":"+358","code":"FI","regexp":"d{5}"},
+    {"name":"France","dial_code":"+33","code":"FR","regexp":"d{2}[ ]?d{3}"},
+    {"name":"French Guiana","dial_code":"+594","code":"GF","regexp":"9[78]3d{2}"},
+    {"name":"French Polynesia","dial_code":"+689","code":"PF","regexp":"987d{2}"},
+    {"name":"Gabon","dial_code":"+241","code":"GA"},
+    {"name":"Gambia","dial_code":"+220","code":"GM"},
+    {"name":"Georgia","dial_code":"+995","code":"GE","regexp":"d{4}"},
+    {"name":"Germany","dial_code":"+49","code":"DE","regexp":"d{5}"},
+    {"name":"Ghana","dial_code":"+233","code":"GH"},
+    {"name":"Gibraltar","dial_code":"+350","code":"GI"},
+    {"name":"Greece","dial_code":"+30","code":"GR","regexp":"d{3}[ ]?d{2}"},
+    {"name":"Greenland","dial_code":"+299","code":"GL","regexp":"39d{2}"},
+    {"name":"Grenada","dial_code":"+1473","code":"GD"},
+    {"name":"Guadeloupe","dial_code":"+590","code":"GP","regexp":"9[78][01]d{2}"},
+    {"name":"Guam","dial_code":"+1671","code":"GU","regexp":"969[123]d([ -]d{4})?"},
+    {"name":"Guatemala","dial_code":"+502","code":"GT","regexp":"d{5}"},
+    {"name":"Guernsey","dial_code":"+44","code":"GG","regexp":"GYd[dA-Z]?[ ]?d[ABD-HJLN-UW-Z]{2}"},
+    {"name":"Guinea","dial_code":"+224","code":"GN","regexp":"d{3}"},
+    {"name":"Guinea-Bissau","dial_code":"+245","code":"GW","regexp":"d{4}"},
+    {"name":"Guyana","dial_code":"+595","code":"GY"},
+    {"name":"Haiti","dial_code":"+509","code":"HT","regexp":"d{4}"},
+    {"name":"Holy See (Vatican City State)","dial_code":"+379","code":"VA","regexp":"00120"},
+    {"name":"Honduras","dial_code":"+504","code":"HN","regexp":"(?:d{5})?"},
+    {"name":"Hong Kong","dial_code":"+852","code":"HK"},
+    {"name":"Hungary","dial_code":"+36","code":"HU","regexp":"d{4}"},
+    {"name":"Iceland","dial_code":"+354","code":"IS","regexp":"d{3}"},
+    {"name":"India","dial_code":"+91","code":"IN","regexp":"d{6}"},
+    {"name":"Indonesia","dial_code":"+62","code":"ID","regexp":"d{5}"},
+    {"name":"Iran, Islamic Republic of Persian Gulf","dial_code":"+98","code":"IR"},
+    {"name":"Iraq","dial_code":"+964","code":"IQ","regexp":"d{5}"},
+    {"name":"Ireland","dial_code":"+353","code":"IE"},
+    {"name":"Isle of Man","dial_code":"+44","code":"IM","regexp":"IMd[dA-Z]?[ ]?d[ABD-HJLN-UW-Z]{2}"},
+    {"name":"Israel","dial_code":"+972","code":"IL","regexp":"d{5}"},
+    {"name":"Italy","dial_code":"+39","code":"IT","regexp":"d{5}"},
+    {"name":"Jamaica","dial_code":"+1876","code":"JM"},
+    {"name":"Japan","dial_code":"+81","code":"JP","regexp":"d{3}-d{4}"},
+    {"name":"Jersey","dial_code":"+44","code":"JE","regexp":"JEd[dA-Z]?[ ]?d[ABD-HJLN-UW-Z]{2}"},
+    {"name":"Jordan","dial_code":"+962","code":"JO","regexp":"d{5}"},
+    {"name":"Kazakhstan","dial_code":"+77","code":"KZ","regexp":"d{6}"},
+    {"name":"Kenya","dial_code":"+254","code":"KE","regexp":"d{5}"},
+    {"name":"Kiribati","dial_code":"+686","code":"KI"},
+    {"name":"Korea, Democratic People's Republic of Korea","dial_code":"+850","code":"KP"},
+    {"name":"Korea, Republic of South Korea","dial_code":"+82","code":"KR","regexp":"d{3}[-]d{3}"},
+    {"name":"Kuwait","dial_code":"+965","code":"KW","regexp":"d{5}"},
+    {"name":"Kyrgyzstan","dial_code":"+996","code":"KG","regexp":"d{6}"},
+    {"name":"Laos","dial_code":"+856","code":"LA","regexp":"d{5}"},
+    {"name":"Latvia","dial_code":"+371","code":"LV","regexp":"d{4}"},
+    {"name":"Lebanon","dial_code":"+961","code":"LB","regexp":"(d{4}([ ]?d{4})?)?"},
+    {"name":"Lesotho","dial_code":"+266","code":"LS","regexp":"d{3}"},
+    {"name":"Liberia","dial_code":"+231","code":"LR","regexp":"d{4}"},
+    {"name":"Libyan Arab Jamahiriya","dial_code":"+218","code":"LY"},
+    {"name":"Liechtenstein","dial_code":"+423","code":"LI","regexp":"(948[5-9])|(949[0-7])"},
+    {"name":"Lithuania","dial_code":"+370","code":"LT","regexp":"d{5}"},
+    {"name":"Luxembourg","dial_code":"+352","code":"LU","regexp":"d{4}"},
+    {"name":"Macao","dial_code":"+853","code":"MO"},
+    {"name":"Macedonia","dial_code":"+389","code":"MK","regexp":"d{4}"},
+    {"name":"Madagascar","dial_code":"+261","code":"MG","regexp":"d{3}"},
+    {"name":"Malawi","dial_code":"+265","code":"MW"},
+    {"name":"Malaysia","dial_code":"+60","code":"MY","regexp":"d{5}"},
+    {"name":"Maldives","dial_code":"+960","code":"MV","regexp":"d{5}"},
+    {"name":"Mali","dial_code":"+223","code":"ML"},
+    {"name":"Malta","dial_code":"+356","code":"MT","regexp":"[A-Z]{3}[ ]?d{2,4}"},
+    {"name":"Marshall Islands","dial_code":"+692","code":"MH","regexp":"969[67]d([ -]d{4})?"},
+    {"name":"Martinique","dial_code":"+596","code":"MQ","regexp":"9[78]2d{2}"},
+    {"name":"Mauritania","dial_code":"+222","code":"MR"},
+    {"name":"Mauritius","dial_code":"+230","code":"MU","regexp":"(d{3}[A-Z]{2}d{3})?"},
+    {"name":"Mayotte","dial_code":"+262","code":"YT","regexp":"976d{2}"},
+    {"name":"Mexico","dial_code":"+52","code":"MX","regexp":"d{5}"},
+    {"name":"Micronesia, Federated States of Micronesia","dial_code":"+691","code":"FM","regexp":"(9694[1-4])([ -]d{4})?"},
+    {"name":"Moldova","dial_code":"+373","code":"MD","regexp":"d{4}"},
+    {"name":"Monaco","dial_code":"+377","code":"MC","regexp":"980d{2}"},
+    {"name":"Mongolia","dial_code":"+976","code":"MN","regexp":"d{6}"},
+    {"name":"Montenegro","dial_code":"+382","code":"ME","regexp":"8d{4}"},
+    {"name":"Montserrat","dial_code":"+1664","code":"MS"},
+    {"name":"Morocco","dial_code":"+212","code":"MA","regexp":"d{5}"},
+    {"name":"Mozambique","dial_code":"+258","code":"MZ"},
+    {"name":"Myanmar","dial_code":"+95","code":"MM"},
+    {"name":"Namibia","dial_code":"+264","code":"NA"},
+    {"name":"Nauru","dial_code":"+674","code":"NR"},
+    {"name":"Nepal","dial_code":"+977","code":"NP","regexp":"d{5}"},
+    {"name":"Netherlands","dial_code":"+31","code":"NL","regexp":"d{4}[ ]?[A-Z]{2}"},
+    {"name":"Netherlands Antilles","dial_code":"+599","code":"AN"},
+    {"name":"New Caledonia","dial_code":"+687","code":"NC","regexp":"988d{2}"},
+    {"name":"New Zealand","dial_code":"+64","code":"NZ","regexp":"d{4}"},
+    {"name":"Nicaragua","dial_code":"+505","code":"NI","regexp":"((d{4}-)?d{3}-d{3}(-d{1})?)?"},
+    {"name":"Niger","dial_code":"+227","code":"NE","regexp":"d{4}"},
+    {"name":"Nigeria","dial_code":"+234","code":"NG","regexp":"(d{6})?"},
+    {"name":"Niue","dial_code":"+683","code":"NU"},
+    {"name":"Norfolk Island","dial_code":"+672","code":"NF","regexp":"2899"},
+    {"name":"Northern Mariana Islands","dial_code":"+1670","code":"MP","regexp":"9695[012]([ -]d{4})?"},
+    {"name":"Norway","dial_code":"+47","code":"NO","regexp":"d{4}"},
+    {"name":"Oman","dial_code":"+968","code":"OM","regexp":"(PC )?d{3}"},
+    {"name":"Pakistan","dial_code":"+92","code":"PK","regexp":"d{5}"},
+    {"name":"Palau","dial_code":"+680","code":"PW","regexp":"96940"},
+    {"name":"Palestinian Territory, Occupied","dial_code":"+970","code":"PS"},
+    {"name":"Panama","dial_code":"+507","code":"PA"},
+    {"name":"Papua New Guinea","dial_code":"+675","code":"PG","regexp":"d{3}"},
+    {"name":"Paraguay","dial_code":"+595","code":"PY","regexp":"d{4}"},
+    {"name":"Peru","dial_code":"+51","code":"PE"},
+    {"name":"Philippines","dial_code":"+63","code":"PH","regexp":"d{4}"},
+    {"name":"Pitcairn","dial_code":"+872","code":"PN","regexp":"PCRN 1ZZ"},
+    {"name":"Poland","dial_code":"+48","code":"PL","regexp":"d{2}-d{3}"},
+    {"name":"Portugal","dial_code":"+351","code":"PT","regexp":"d{4}([-]d{3})?"},
+    {"name":"Puerto Rico","dial_code":"+1939","code":"PR","regexp":"00[679]d{2}([ -]d{4})?"},
+    {"name":"Qatar","dial_code":"+974","code":"QA"},
+    {"name":"Romania","dial_code":"+40","code":"RO","regexp":"d{6}"},
+    {"name":"Russia","dial_code":"+7","code":"RU","regexp":"d{6}"},
+    {"name":"Rwanda","dial_code":"+250","code":"RW"},
+    {"name":"Reunion","dial_code":"+262","code":"RE","regexp":"9[78]4d{2}"},
+    {"name":"Saint Barthelemy","dial_code":"+590","code":"BL"},
+    {"name":"Saint Helena, Ascension and Tristan Da Cunha","dial_code":"+290","code":"SH","regexp":"(ASCN|STHL) 1ZZ"},
+    {"name":"Saint Kitts and Nevis","dial_code":"+1869","code":"KN"},
+    {"name":"Saint Lucia","dial_code":"+1758","code":"LC"},
+    {"name":"Saint Martin","dial_code":"+590","code":"MF"},
+    {"name":"Saint Pierre and Miquelon","dial_code":"+508","code":"PM","regexp":"9[78]5d{2}"},
+    {"name":"Saint Vincent and the Grenadines","dial_code":"+1784","code":"VC"},
+    {"name":"Samoa","dial_code":"+685","code":"WS"},
+    {"name":"San Marino","dial_code":"+378","code":"SM","regexp":"4789d"},
+    {"name":"Sao Tome and Principe","dial_code":"+239","code":"ST"},
+    {"name":"Saudi Arabia","dial_code":"+966","code":"SA","regexp":"d{5}"},
+    {"name":"Senegal","dial_code":"+221","code":"SN","regexp":"d{5}"},
+    {"name":"Serbia","dial_code":"+381","code":"RS","regexp":"d{6}"},
+    {"name":"Seychelles","dial_code":"+248","code":"SC"},
+    {"name":"Sierra Leone","dial_code":"+232","code":"SL"},
+    {"name":"Singapore","dial_code":"+65","code":"SG","regexp":"d{6}"},
+    {"name":"Slovakia","dial_code":"+421","code":"SK","regexp":"d{3}[ ]?d{2}"},
+    {"name":"Slovenia","dial_code":"+386","code":"SI","regexp":"d{4}"},
+    {"name":"Solomon Islands","dial_code":"+677","code":"SB"},
+    {"name":"Somalia","dial_code":"+252","code":"SO","regexp":"d{5}"},
+    {"name":"South Africa","dial_code":"+27","code":"ZA","regexp":"d{4}"},
+    {"name":"South Sudan","dial_code":"+211","code":"SS"},
+    {"name":"South Georgia and the South Sandwich Islands","dial_code":"+500","code":"GS","regexp":"SIQQ 1ZZ"},
+    {"name":"Spain","dial_code":"+34","code":"ES","regexp":"d{5}"},
+    {"name":"Sri Lanka","dial_code":"+94","code":"LK","regexp":"d{5}"},
+    {"name":"Sudan","dial_code":"+249","code":"SD"},
+    {"name":"Suriname","dial_code":"+597","code":"SR"},
+    {"name":"Svalbard and Jan Mayen","dial_code":"+47","code":"SJ","regexp":"d{4}"},
+    {"name":"Swaziland","dial_code":"+268","code":"SZ","regexp":"[HLMS]d{3}"},
+    {"name":"Sweden","dial_code":"+46","code":"SE","regexp":"d{3}[ ]?d{2}"},
+    {"name":"Switzerland","dial_code":"+41","code":"CH","regexp":"d{4}"},
+    {"name":"Syrian Arab Republic","dial_code":"+963","code":"SY"},
+    {"name":"Taiwan","dial_code":"+886","code":"TW","regexp":"d{3}(d{2})?"},
+    {"name":"Tajikistan","dial_code":"+992","code":"TJ","regexp":"d{6}"},
+    {"name":"Tanzania, United Republic of Tanzania","dial_code":"+255","code":"TZ"},
+    {"name":"Thailand","dial_code":"+66","code":"TH","regexp":"d{5}"},
+    {"name":"Timor-Leste","dial_code":"+670","code":"TL"},
+    {"name":"Togo","dial_code":"+228","code":"TG"},
+    {"name":"Tokelau","dial_code":"+690","code":"TK"},
+    {"name":"Tonga","dial_code":"+676","code":"TO"},
+    {"name":"Trinidad and Tobago","dial_code":"+1868","code":"TT"},
+    {"name":"Tunisia","dial_code":"+216","code":"TN","regexp":"d{4}"},
+    {"name":"Turkey","dial_code":"+90","code":"TR","regexp":"d{5}"},
+    {"name":"Turkmenistan","dial_code":"+993","code":"TM","regexp":"d{6}"},
+    {"name":"Turks and Caicos Islands","dial_code":"+1649","code":"TC","regexp":"TKCA 1ZZ"},
+    {"name":"Tuvalu","dial_code":"+688","code":"TV"},
+    {"name":"Uganda","dial_code":"+256","code":"UG"},
+    {"name":"Ukraine","dial_code":"+380","code":"UA","regexp":"d{5}"},
+    {"name":"United Arab Emirates","dial_code":"+971","code":"AE"},
+    {"name":"United Kingdom","dial_code":"+44","code":"GB","regexp":"GIR[ ]?0AA|((AB|AL|B|BA|BB|BD|BH|BL|BN|BR|BS|BT|CA|CB|CF|CH|CM|CO|CR|CT|CV|CW|DA|DD|DE|DG|DH|DL|DN|DT|DY|E|EC|EH|EN|EX|FK|FY|G|GL|GY|GU|HA|HD|HG|HP|HR|HS|HU|HX|IG|IM|IP|IV|JE|KA|KT|KW|KY|L|LA|LD|LE|LL|LN|LS|LU|M|ME|MK|ML|N|NE|NG|NN|NP|NR|NW|OL|OX|PA|PE|PH|PL|PO|PR|RG|RH|RM|S|SA|SE|SG|SK|SL|SM|SN|SO|SP|SR|SS|ST|SW|SY|TA|TD|TF|TN|TQ|TR|TS|TW|UB|W|WA|WC|WD|WF|WN|WR|WS|WV|YO|ZE)(d[dA-Z]?[ ]?d[ABD-HJLN-UW-Z]{2}))|BFPO[ ]?d{1,4}"},
+    {"name":"United States","dial_code":"+1","code":"US","regexp":"d{5}([ -]d{4})?"},
+    {"name":"Uruguay","dial_code":"+598","code":"UY","regexp":"d{5}"},
+    {"name":"Uzbekistan","dial_code":"+998","code":"UZ","regexp":"d{6}"},
+    {"name":"Vanuatu","dial_code":"+678","code":"VU"},
+    {"name":"Venezuela, Bolivarian Republic of Venezuela","dial_code":"+58","code":"VE","regexp":"d{4}"},
+    {"name":"Vietnam","dial_code":"+84","code":"VN"},
+    {"name":"Virgin Islands, British","dial_code":"+1284","code":"VG"},
+    {"name":"Virgin Islands, U.S.","dial_code":"+1340","code":"VI","regexp":"008(([0-4]d)|(5[01]))([ -]d{4})?"},
+    {"name":"Wallis and Futuna","dial_code":"+681","code":"WF","regexp":"986d{2}"},
+    {"name":"Yemen","dial_code":"+967","code":"YE"},
+    {"name":"Zambia","dial_code":"+260","code":"ZM","regexp":"d{5}"},
+    {"name":"Zimbabwe","dial_code":"+263","code":"ZW"}
+];
+
