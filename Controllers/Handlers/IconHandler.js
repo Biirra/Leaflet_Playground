@@ -3,6 +3,13 @@ const LEAFLET_ICONS = {
         iconUrl: 'assets/icons/Icon_itembox.png',
         iconSize: [35, 35],
         iconAnchor: [0, 0],
-        popupAnchor: [-3, -76]
+        popupAnchor: [0, 0]
+    }),
+    ZOOM_ON_CURRENT_LOCATION: L.icon({
+        iconUrl: 'assets/icons/search.png',
+        iconSize: [30, 30],
+        iconAnchor: [0, 0],
+        popupAnchor: [0, 0],
+        attribution: `https://www.flaticon.com/free-icons/maps-and-location Maps and location icons created by Flowicon - Flaticon`
     })
 }

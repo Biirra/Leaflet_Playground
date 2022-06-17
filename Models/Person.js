@@ -326,11 +326,11 @@ Math.colapseNumber = function(number){
  * @returns Array[ Number, ... ]
  */
  String.getCharacterPositionsInAlphabet = function(input, alphabet = 'abcdefghijklmnopqrstuvwxyz'){
-    const result = [];
-    for(let i = 0; i < input.length; i++) {
-        const lowercaseLetter = input[i].toLowerCase();
-        const charIndex = alphabet.indexOf(lowercaseLetter) + 1;
-        result.push(charIndex);
+    const result = [];  // contains the alphabet index of all the letters in the name.
+    for(let i = 0; i < input.length; i++) { // for each letter in the name
+        const lowercaseLetter = input[i].toLowerCase(); // get lowercase letter
+        const charIndex = alphabet.indexOf(lowercaseLetter) + 1; // get index of letter in alphabet
+        result.push(charIndex); // add index to result
     }
     return result;
 }
@@ -478,3 +478,27 @@ const NUMERIC_PERSONALITY_MEANING = {
 }
 
 
+class RPG_Properties {
+    _defense = 0;  
+    _attack = 0;    
+
+    /**
+     * strength and dexterety are what forms the speed in general
+     * Luck adds a little speed because for example: having the wind in your back or not walking in soft earth by coincidence
+     * Intelligence is subtracted from luck because overthinking things takes more time than just thinking
+     * Wisdom counteracts this cause even a fool learns from experience.
+     */
+    _speed = 0; // strength * dexterity / 2 + (luck / (intelligence - wisdom)) 
+
+    _constitution = 0;      // Constitution is the ability to withstand and resist physical harm.
+    _dexterity = 0;         // Dexterity is the ability to avoid attacks and to move around.
+    _intelligence = 0;      // Intelligence is the ability to think logically and to reason.
+    _luck = 0;              // Luck is the ability to overcome difficulties.
+    _strength = 0;          // Strength is the ability to lift and carry heavy things.
+    _wisdom = 0;            // Wisdom is the ability to understand the meaning of things.
+    _charisma = 0;          // Charisma is the ability to interact with people.
+
+     
+    
+
+}

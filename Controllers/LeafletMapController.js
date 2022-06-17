@@ -1,33 +1,89 @@
+const WORLD_MAPS = {
+    "Satellite": L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        name: 'Mapbox Satellite',
+        maxZoom: 18,
+        id: 'mapbox/satellite-v9',//'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA'
+    }),
+    "Streets": L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        name: 'Mapbox Streets',
+        maxZoom: 18,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA'
+    }),
+    "Outdoors": L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        name: 'Mapbox Outdoors',
+        maxZoom: 18,
+        id: 'mapbox/outdoors-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA'
+    }),
+    "Dark": L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        name: 'Mapbox Dark',
+        maxZoom: 18,
+        id: 'mapbox/dark-v10',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA'
+    }),
+    "Light": L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        name: 'Mapbox Light',
+        maxZoom: 18,
+        id: 'mapbox/light-v10',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA'
+    })
+};
+
+const DEFAULT_CHART = 'Dark';
+const DEFAULT_ZOOM_LEVEL = 13;
+const DEFAULT_COORDINATES = [52.704475, 5.753059];
 class LeafletMapController{
     _map;
-    DEFAULT_COORDINATES = [52.704475, 5.753059];
-    DEFAULT_ZOOM_LEVEL = 13;
+    _currentChart = null;
     constructor(domId){
         this.map = L.map(domId);
         this.init();
     }
     init(){
-        this.map.setView(this.DEFAULT_COORDINATES, this.DEFAULT_ZOOM_LEVEL); // set coordinates to some place on startup.
+        this.map.setView(DEFAULT_COORDINATES, DEFAULT_ZOOM_LEVEL); // set coordinates to some place on startup.
+        this.map.on('click', this.onMapClick.bind(this)); // bind click event to map
 
-        // leaflet map init stuff.
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/satellite-v9',//'mapbox/streets-v11',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA'
-        }).addTo(this.map);
+        this.addWorldMap(DEFAULT_CHART); // add a map so there is always a map selected.
 
-        this.setInputListeners(); // set Listeners
-        
-        
-        this.addGeoJson();
+        this.createUI(); // create the UI.
+
+        this.addGeoJson(); // add a line around the country borders. called asyncronously so it doesnt desturb anything.
+    }
+    /**
+     * change the current Chart to the one selected in the dropdown menu and update the map.
+     * @param {String} chartname Optional. If not set, the DEFALT_CHART chart will be used.
+     */
+    addWorldMap(chartname){
+        if(this.currentChart) this.currentChart.remove(this.map); // remove the current chart if there is one.
+        if(chartname){
+            this.currentChart = this.getMapByName(chartname); // set the current chart to the one selected in the dropdown menu.
+        } else if(DEFAULT_CHART){
+            this.currentChart = this.getMapByName(DEFAULT_CHART); // set the current chart to the default chart.
+        } else {
+            console.error('No default chart set.'); // if no default chart is set, throw an error.
+        }
+        this.currentChart.addTo(this.map); // add the current chart to the map.
     }
     async addGeoJson() {
-        const response = await fetch("https://s3.amazonaws.com/rawstore.datahub.io/23f420f929e0e09c39d916b8aaa166fb.geojson");
-        const data = await response.json();
-        console.log(data);
+        const response = await fetch("https://s3.amazonaws.com/rawstore.datahub.io/23f420f929e0e09c39d916b8aaa166fb.geojson"); // get the geojson file.
+        const data = await response.json(); // parse the json file.
         L.geoJson(
             data,{
             style: {
@@ -38,13 +94,21 @@ class LeafletMapController{
                 fillOpacity: 0.5,
                 color: "#ffffff"
             }
-        }).addTo(this.map);
-    }
-    setInputListeners(){
-        this.map.on('click', this.onMapClick.bind(this));
+        }).addTo(this.map); // add the geojson to the map.
     }
     onMapClick(e) {
         this.setMarker(e.latlng);
+    }
+    createDropDownSelectChart(){
+        const dropdown = new LeafletDropDown({position: "topleft"}, WORLD_MAPS, DEFAULT_CHART); // create a new dropdown menu
+        const self = this; // save the controller in a variable
+
+        // create a function that will be called when a new chart is selected
+        const onSelectNewChart = function(e){ 
+            self.addWorldMap(e.target.value);   // add the new chart
+        }
+        dropdown.onChange = onSelectNewChart; // set the onChange event for the dropdown. This will be called when the user selects a new chart.
+        dropdown.addTo(this.map);
     }
     setPopup(latlng, msg = '') {
         const popup = L.popup({
@@ -78,9 +142,74 @@ class LeafletMapController{
             // applying onclick functionality
             marker.on('click', () => {
                 onClick();
-                marker.remove();
             });
         } 
+    }
+    getMapByName(name){
+        return WORLD_MAPS[name];
+    }
+    getAllPosibleMapKeys(){
+        return Object.keys(WORLD_MAPS); // return all the keys of the WORLD_MAPS object.
+    }
+    getAllPosibleMaps(){
+        const keys = Object.keys(WORLD_MAPS);
+        const result = [];
+        for(let i = 0; i < keys.length; i++){
+            const key = keys[i];
+            result.push(WORLD_MAPS[key]);
+        }
+        return result;
+    }
+    createUI(){
+        // create the Dropdown menu for selecting a chart
+        // uncomment this if you want to use the dropdown menu. 
+        // this.createDropDownSelectChart(); //Maps can currently be chosen in the layerController in this.createLayerController() 
+
+        // Add the layer controller to the map. This will allow the user to switch between Layers.
+        // This creates the button and the dropdown menu. Docs: (https://leafletjs.com/examples/layers-control/)
+        this.createLayerController();
+
+        // create a button to zoom in on current location
+        this.createButtonZoomInOnCurrLocation();
+
+        
+        
+    }
+    createLayerController(){
+        const layerController = L.control.layers().addTo(this.map);
+        // add all the maps and mapnames to the layer controller.
+        const mapNames = this.getAllPosibleMapKeys();
+        const maps = this.getAllPosibleMaps();
+        // check if the output length of mapNames and maps is the same.
+        if(mapNames.length !== maps.length){
+            console.error('The length of the mapNames and maps arrays are not the same.');
+            return;
+        }
+        for(let i = 0; i < maps.length; i++){
+            const map = maps[i];
+            const mapName = mapNames[i];
+            layerController.addBaseLayer(map, mapName);
+        }
+    }
+    createButtonZoomInOnCurrLocation(){
+
+        const zoomInOnUserLocation = () => { // create a function that will be called when the button is clicked
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(position => {
+                    const latlng = L.latLng(position.coords.latitude, position.coords.longitude);
+                    this.map.setView(latlng, 15);
+                });
+            }
+        }
+
+        const button = new LeafletButton({
+            position: "topleft",
+            icon: LEAFLET_ICONS.ZOOM_ON_CURRENT_LOCATION,
+            width: '32px',
+            height: '32px',
+        }); // create a new button
+        button.onClick = zoomInOnUserLocation; // set the onClick event for the button. This will be called when the button is clicked.
+        button.addTo(this.map); // add the button to the map.
     }
     set map(map){
         this._map = map;
@@ -88,4 +217,17 @@ class LeafletMapController{
     get map(){
         return this._map;
     }
+    get currentChart(){
+        return this._currentChart;
+    }
+    set currentChart(chart){
+        this._currentChart = chart;
+    }
 }
+
+
+
+
+
+
+
