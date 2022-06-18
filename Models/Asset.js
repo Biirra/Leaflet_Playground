@@ -1,4 +1,4 @@
-class Item {
+class Asset {
     itemID;
     itemName;
     weigth;

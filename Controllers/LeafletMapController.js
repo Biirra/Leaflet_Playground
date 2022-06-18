@@ -63,8 +63,6 @@ class LeafletMapController{
         this.addWorldMap(DEFAULT_CHART); // add a map so there is always a map selected.
 
         this.createUI(); // create the UI.
-
-        this.addGeoJson(); // add a line around the country borders. called asyncronously so it doesnt desturb anything.
     }
     /**
      * change the current Chart to the one selected in the dropdown menu and update the map.
@@ -81,20 +79,20 @@ class LeafletMapController{
         }
         this.currentChart.addTo(this.map); // add the current chart to the map.
     }
-    async addGeoJson() {
-        const response = await fetch("https://s3.amazonaws.com/rawstore.datahub.io/23f420f929e0e09c39d916b8aaa166fb.geojson"); // get the geojson file.
+    /**
+     * Retrieves a geoJson object from the server.
+     * example link: 
+     * https://s3.amazonaws.com/rawstore.datahub.io/23f420f929e0e09c39d916b8aaa166fb.geojson // a rough estamate of the country borders.
+     * @param {String} geoJsonLink 
+     * @param {Object} options Optional. Options for the request.
+     */
+    async getGeoJson(geoJsonLink, options) {
+        const response = await fetch(geoJsonLink).catch(e => {
+            console.log("Error", e);
+          }); // get the geojson file.
         const data = await response.json(); // parse the json file.
-        L.geoJson(
-            data,{
-            style: {
-                fillColor: 'none',
-                weight: 0.5,
-                opacity: 1,
-                dashArray: '3',
-                fillOpacity: 0.5,
-                color: "#ffffff"
-            }
-        }).addTo(this.map); // add the geojson to the map.
+        const result = L.geoJson(data, options); // create a geoJson object from the parsed json file.
+        return result; // return the geoJson object.
     }
     onMapClick(e) {
         this.setMarker(e.latlng);
@@ -172,24 +170,49 @@ class LeafletMapController{
         // create a button to zoom in on current location
         this.createButtonZoomInOnCurrLocation();
 
-        
-        
     }
     createLayerController(){
-        const layerController = L.control.layers().addTo(this.map);
+        // create a new layer controller.
+        const layerController = L.control.layers().addTo(this.map); 
+
         // add all the maps and mapnames to the layer controller.
         const mapNames = this.getAllPosibleMapKeys();
         const maps = this.getAllPosibleMaps();
+
         // check if the output length of mapNames and maps is the same.
         if(mapNames.length !== maps.length){
             console.error('The length of the mapNames and maps arrays are not the same.');
             return;
         }
+
+        // add all the maps to the layer controller.
         for(let i = 0; i < maps.length; i++){
             const map = maps[i];
             const mapName = mapNames[i];
             layerController.addBaseLayer(map, mapName);
         }
+
+        // add datalayers to the layer controller.
+        const dataLayers = this.getAllPossibleDataLayers();
+        for(let i = 0; i < dataLayers.length; i++){
+            const layer = dataLayers[i];
+            if(layer.type === LAYER_TYPE.GEOJSON){
+                const promisedData = this.getGeoJson(layer.url, {style: {color: 'red'}});
+                promisedData.then(result => {
+                    console.log("Adding overlay...")
+                    layerController.addOverlay(result, layer.displayName);
+                }).catch(e => {
+                    console.log("Error", e);
+                });
+            } else if(layer.type === LAYER_TYPE.DEFAULT){
+                layerController.addOverlay(layer.layerData, layer.displayName);
+            }
+        }
+        
+    }
+    getAllPossibleDataLayers(){
+        const result = [LAYER_DATA.COUNTRY_BORDERS_ROUGH];
+        return result;
     }
     createButtonZoomInOnCurrLocation(){
 

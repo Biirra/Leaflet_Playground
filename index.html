@@ -57,7 +57,6 @@
             }
 
         </style>
-        <link rel="stylesheet" href="Views/CalculatorView.css">
         
         <script>
             Object.defineProperty(String.prototype, 'capitalize', {
@@ -68,32 +67,20 @@
             });
         </script>
         
-        <script src="Models/Property.js"></script>
+        <script src="Handlers/IconHandler.js"></script>
+        <script src="Handlers/LayerDataHandler.js"></script>
+
         <script src="Models/Country.js"></script>
-        <script src="Models/Person.js"></script>
         <script src="Models/Location.js"></script>
-        <script src="Models/Provinse.js"></script>
-        <script src="Models/House.js"></script>
-        <script src="Models/Item.js"></script>
-        <script src="Models/Calculator.js"></script>
-        <script src="Models/Inventory.js"></script>
-        <script src="Models/Stopwatch.js"></script>
+        
+        <script src="Models/LeafletLayerControllerButton.js"></script>
         <script src="Models/LeafletDromDown.js"></script>
         <script src="Models/LeafletButton.js"></script>
+        <script src="Models/Asset.js"></script>
         
-        <script src="ChineseAstrology.js"></script>
-        <script src="WesternAstrology.js"></script>
-
-        <script src="Controllers/Handlers/IconHandler.js"></script>
-        <script src="Controllers/CalculatorController.js"></script>
-        <script src="Controllers/PropertyController.js"></script>
-        <script src="Controllers/PersonController.js"></script>
         <script src="Controllers/LeafletMapController.js"></script>
         
         <script src="Views/BS_ModelView.js"></script>
-        <script src="Views/CalculatorView.js"></script>
-        <script src="Views/PersonView.js"></script>
-        <script src="Views/InventoryView.js"></script>
 
 
         
@@ -104,102 +91,15 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <div id="map" >
-                         
-                    </div>
-                </div>
-                <div id="personalInfo" class="col">
-                    <h2>Personal Info:</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div id="westernAstrologyInfo" class="col" hidden>
-                    <h2>Western Astrology:</h2>
-                </div>
-                <div id="chineseAstrologyInfo" class="col" hidden>
-                    <h2>Chinese Astrology:</h2>
-                </div>
-                <div id="elementAstrologyInfo" class="col" hidden>
-                    <h2>Elemental Astrology:</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div id="inventory" class="col"></div>
-            </div>
-        </div>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <a><img src="assets/icons/Icon_itembox.png"></a> Test
+                    <div id="map" ></div>
                 </div>
             </div>
         </div>
-        
         
         <script>
             
-
-            const testCar = new Car();
-            const testProperty = new House();
-            
-            const person = new Person();
-            person.firstName = 'Jan Willem'
-            person.birthName = 'Jahannus Willeminus'
-            person.prefix = 'van'
-            person.lastName = 'Huising'
-            person.birthDay = '1990/01/27'
-            person.honorific = HONORIFIC.MR
-            person.height = 184;
-            person.weight = 84;
-
-            person.residense.country = 'NL';
-            person.residense.provinse = 'Drenthe';
-            person.residense.postalCode = '2594TK';
-            person.residense.coordinates = [52.704475, 5.753059];
-
-            console.log(person);
-
-            // give person some items.
-            person.property.addProperty(testProperty);
-            person.property.addProperty(testCar);          
-
-
-            const calculator = new Calculator();
-            calculator.coordinates = [52.704475, 5.753059, 15];
-
-            const calculator1 = new Calculator();
-            calculator1.coordinates = [52.704475, 5.753489, 15];
-
-            const itemsToSpawnInWorld = [calculator,calculator1];
-
+            // Create the GIS application
             const map = new LeafletMapController("map");
-            // add item markers on the map a user can pick up.
-            for (let i = 0; i < itemsToSpawnInWorld.length; i++) {
-                const currentItem = itemsToSpawnInWorld[i];
-                if(!currentItem.existsInMap) continue;
-
-                map.setMarker(
-                    currentItem.coordinates.latlng, // setmarker takes [lat, lng]
-                    currentItem, 
-                    () => {
-                        currentItem.existsInMap = false;
-                        person.inventory.addItem(currentItem);
-                        person.inventory.view.createInventoryView('inventory');
-                    }); 
-            }
-
-
-            // create views
-            person.view.createPersonalInfoTable('personalInfo');
-            person.view.createWesternAstrologyInfoTable('westernAstrologyInfo');
-            person.view.createChineseAstrologyTable('chineseAstrologyInfo');
-            person.view.createElementAstrologyTable('elementAstrologyInfo')
-            person.inventory.view.createInventoryView('inventory');
-
-
-            let sw = new Stopwatch();
-            sw.start();
-            
         </script>
     </body>
 </html>

@@ -56,6 +56,20 @@ class LeafletDropDown extends L.Control{
     onRemove(map){
     
     }
+    addMarkersToMap(markers){
+        // add item markers on the map a user can pick up.
+        for (let i = 0; i < markers.length; i++) {
+            const currentItem = markers[i];
+            if(!currentItem.existsInMap) continue;
+
+            map.setMarker(
+                currentItem.coordinates.latlng, // setmarker takes [lat, lng]
+                currentItem, 
+                () => {
+                    currentItem.existsInMap = false;
+                }); 
+        }
+    }
     set map(map){
         this._map = map;
     }

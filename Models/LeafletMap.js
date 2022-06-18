@@ -1,3 +1,3 @@
 class LeafletMap{
-    
+    _map;
 }

@@ -24,7 +24,6 @@ class LeafletButton extends L.Control{
         // Creating a button
         var button = L.DomUtil.create('a', '', container);
         button.title = this.title;
-        console.log(LEAFLET_ICONS.ZOOM_ON_CURRENT_LOCATION.createIcon())
         
         button.onclick = this.onClick.bind(this);
         button.style.width = this.width;
