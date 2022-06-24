@@ -2,9 +2,17 @@ const LAYER_TYPE = {
     GEOJSON: "geojson",
 }
 const LAYER_DATA = {
-    COUNTRY_BORDERS_ROUGH: {
+    TOWNSHIP_NETHERLANDS: {
         type: LAYER_TYPE.GEOJSON,
-        url: "https://s3.amazonaws.com/rawstore.datahub.io/23f420f929e0e09c39d916b8aaa166fb.geojson",
-        displayName: "test"
+        url: "https://www.webuildinternet.com/articles/2015-07-19-geojson-data-of-the-netherlands/townships.geojson",
+        displayName: "Gemeente's Nederland",
+        options: {style: {color: 'red'}}
+    },
+    PROVINCE_NETHERLANDS: {
+        type: LAYER_TYPE.GEOJSON,
+        url: "https://www.webuildinternet.com/articles/2015-07-19-geojson-data-of-the-netherlands/provinces.geojson",
+        displayName: "Provincie's Nederland",
+        options: {style: {color: 'blue'}}
     }
+
 }

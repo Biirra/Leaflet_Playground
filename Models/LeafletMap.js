@@ -1,3 +1,0 @@
-class LeafletMap{
-    _map;
-}

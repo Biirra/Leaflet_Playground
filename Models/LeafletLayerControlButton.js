@@ -1,4 +1,4 @@
-class LeafletLayerControllerButton extends L.control{
+class LeafletLayerControlButton extends L.control{
     constructor(options){
         super(options);
         console.log("Layercontroller loaded");

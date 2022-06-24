@@ -15,6 +15,13 @@
                 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
                 crossorigin=""></script>
 
+        <!-- Leaflet custom layer controlle. For layerGroup in layergroup action. Remember to contribute. "assets\External\Leaflet_StyledLayerControl\LICENSE" -->
+        <!--
+        <script src="assets\External\Leaflet_StyledLayerControl\src\styledLayerControl.js"></script>
+        <link rel="stylesheet" href="assets\External\Leaflet_StyledLayerControl\css\styledLayerControl.css">
+        -->
+
+
         <style>
             body{
                 font-family: Arial, Helvetica, sans-serif;
@@ -66,20 +73,35 @@
                 enumerable: false
             });
         </script>
+
         
+        <script src="Config/ApplicationConfig.js"></script>
+
+        <script src="Data/Error_Translations.js"></script>
+        <script src="Data/mock_data.js"></script>
+
+        <script src="Handlers/DebugHandler.js"></script>
         <script src="Handlers/IconHandler.js"></script>
         <script src="Handlers/LayerDataHandler.js"></script>
+        <script src="Handlers/WorldMapHandler.js"></script>
 
         <script src="Models/Country.js"></script>
         <script src="Models/Location.js"></script>
         
-        <script src="Models/LeafletLayerControllerButton.js"></script>
+        <script src="Models/LeafletLayerControlButton.js"></script>
         <script src="Models/LeafletDromDown.js"></script>
         <script src="Models/LeafletButton.js"></script>
+        <script src="Models/MapLeaflet.js"></script>
+
         <script src="Models/Asset.js"></script>
         
-        <script src="Controllers/LeafletMapController.js"></script>
         
+        <script src="Controllers/LeafletMapController.js"></script>
+        <script src="Controllers/ImportController.js"></script>
+        <script src="Controllers/AssetController.js"></script>
+        
+        <script src="Controllers/ApplicationController.js"></script>
+
         <script src="Views/BS_ModelView.js"></script>
 
 
@@ -99,7 +121,9 @@
         <script>
             
             // Create the GIS application
-            const map = new LeafletMapController("map");
+            const map = new MapLeaflet("map");//
+            const mapController = new ApplicationController(map);
+
         </script>
     </body>
 </html>

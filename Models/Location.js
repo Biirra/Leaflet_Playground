@@ -74,12 +74,12 @@ class Location{
 
 class Coordinates{
     _lat;
-    _long;
+    _lng;
     _alt;
     constructor(latlang = [0,0,0]){
-        this.lat = latlang[0];
-        this.long = latlang[1];
-        this.alt = latlang[2];
+        this.lat = latlang[0] ? latlang[0] : 0;
+        this.lng = latlang[1] ? latlang[1] : 0;
+        this.alt = latlang[2] ? latlang[2] : 0;
     }
     set lat(lat){
         this._lat = lat;
@@ -88,11 +88,11 @@ class Coordinates{
         return this._lat;
     }
 
-    set long(long) {
-        this._long = long;
+    set lng(lng) {
+        this._lng = lng;
     }
-    get long() {
-        return this._long;
+    get lng() {
+        return this._lng;
     }
 
     set alt(alt) {
@@ -103,6 +103,6 @@ class Coordinates{
     }
 
     get latlng() {
-        return [this._lat, this._long];
+        return [this._lat, this._lng];
     }
 }
