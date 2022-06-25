@@ -11,7 +11,17 @@ class ApplicationController {
         // get all leafletDataLayers from the assetController
         const leafletDataLayers = this.assetController.leafletLayerData;
         // add leafletDataLayers to the mapController
-        this.mapController.addDataLayerGroups(leafletDataLayers);
+        this.mapController.addDataLayers(leafletDataLayers);
+
+        // add async data layers to the mapController. Done at top level to avoid CORS issues.
+        this.mapController.addAsyncDataLayers(LAYER_DATA);
+
+
+        // get gejson from local folder using import controller. CORS issues.
+        // const geojson = ImportController.getGeoJsonFromLocal("assets/countries.geojson");
+        // console.log(geojson)
+
+        
     }
 
     set assetController(assetController) {

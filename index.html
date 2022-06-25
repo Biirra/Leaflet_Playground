@@ -16,19 +16,20 @@
                 crossorigin=""></script>
 
         <!-- Leaflet custom layer controlle. For layerGroup in layergroup action. Remember to contribute. "assets\External\Leaflet_StyledLayerControl\LICENSE" -->
-        <!--
         <script src="assets\External\Leaflet_StyledLayerControl\src\styledLayerControl.js"></script>
         <link rel="stylesheet" href="assets\External\Leaflet_StyledLayerControl\css\styledLayerControl.css">
-        -->
 
+        <!-- leaflet plugin for drawing controlls -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js" integrity="sha512-ozq8xQKq6urvuU6jNgkfqAmT7jKN2XumbrX1JiB3TnF7tI48DPI4Gy1GXKD/V3EExgAs1V+pRO7vwtS1LHg0Gw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" integrity="sha512-gc3xjCmIy673V6MyOAZhIW93xhM9ei1I+gLbmFjUHIjocENRsLX/QUE1htk5q1XV2D/iie/VQ8DXI6Vu8bexvQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
         <style>
             body{
                 font-family: Arial, Helvetica, sans-serif;
             }
             #map{
-                height:500px;
-                width: 700px;
+                height:800px;
+                width: 1000px;
             }
             .row{
                 margin-left: 0px;
@@ -75,6 +76,7 @@
         </script>
 
         
+
         <script src="Config/ApplicationConfig.js"></script>
 
         <script src="Data/Error_Translations.js"></script>
@@ -88,13 +90,10 @@
         <script src="Models/Country.js"></script>
         <script src="Models/Location.js"></script>
         
-        <script src="Models/LeafletLayerControlButton.js"></script>
-        <script src="Models/LeafletDromDown.js"></script>
+        <script src="Models/DrawTool.js"></script>
         <script src="Models/LeafletButton.js"></script>
         <script src="Models/MapLeaflet.js"></script>
-
         <script src="Models/Asset.js"></script>
-        
         
         <script src="Controllers/LeafletMapController.js"></script>
         <script src="Controllers/ImportController.js"></script>

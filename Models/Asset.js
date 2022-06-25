@@ -1,36 +1,44 @@
 class Asset {
-    _assetId;
-    _layerGroupId; // contains the id of the layergroup that this item is in. Important for leaflet layergroups.
-    _layerGroupIdParent; // contains the id of the layergroup that this item is in. Important for leaflet layergroups. Group the layers in the layergroup.
+    _groupName;
+    _displayName;
     _coordinates; // the coordinates of the asset in leaflet.
-    _visible; // Asset is visible in the map if it is added to a layergroup and is visible in the layergroup.
+    _checked; // Asset is checked in the map controller
     _extendedData = {}; // attributes that are not part of the data model but are used by the application.
     _icon = LEAFLET_ICONS.ITEM;
     constructor(){
+
     }
     use(){
         return 'This item has no function.';
     }
     setData(data){
-        this._assetId = data.name ? data.name : null;
-        this._layerGroupId = data.layerGroupId ? data.layerGroupId : null;
-        this._coordinates = data.location ? new Coordinates(data.location) : null;
-        this._visible = data.visible ? data.visible : true;
-        this._layerGroupIdParent = data.layerGroupIdParent ? data.layerGroupIdParent : null;
+        this._groupName = data.groupName ? data.groupName : null;
+        this._displayName = data.displayName ? data.displayName : null;
+        this._coordinates = data.latlang ? new Coordinates(data.latlang) : null;
+        this._checked = data.checked ? data.checked : false;
+        this._extendedData = data.extendedData ? data.extendedData : {};
+        this._icon = data.icon ? data.icon : LEAFLET_ICONS.ITEM;
+
     }
 
-    get layerGroupIdParent(){
-        return this._layerGroupIdParent;
+    
+    get groupName(){
+        return this._groupName;
     }
-    set layerGroupIdParent(layerGroupIdParent){
-        this._layerGroupIdParent = layerGroupIdParent;
+    set groupName(groupName){
+        this._groupName = groupName;
     }
-
-    get assetId(){
-        return this._assetId;
+    get extendedData(){
+        return this._extendedData;
     }
-    set assetId(assetId){
-        this._assetId = assetId;
+    set extendedData(extendedData){
+        this._extendedData = extendedData;
+    }
+    get displayName(){
+        return this._displayName;
+    }
+    set displayName( displayName ) {
+        this._displayName = displayName;
     }
     get layerGroupId(){
         return this._layerGroupId;
@@ -44,14 +52,11 @@ class Asset {
     get icon(){
         return this._icon;
     }
-    get visible(){
-        if(this._visible && this._layerGroupId){
-            return this._visible;
-        }
-        return false;
+    get checked(){
+        return this._checked;
     }
-    set visible(visible){
-        this._visible = visible;
+    set checked(checked){
+        this._checked = checked;
     }
     set coordinates(coordinates){
         this._coordinates = new Coordinates(coordinates);

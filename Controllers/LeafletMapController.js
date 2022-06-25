@@ -17,107 +17,84 @@ class LeafletMapController{
         this.mapData.changeWorldMap(DEFAULT_CHART); // add a map so there is always a map selected.
 
         this.createUI(); // create the UI.
+        
     }
-    
-    /**
-     * Retrieves a geoJson object from the server.
-     * example link: 
-     * https://s3.amazonaws.com/rawstore.datahub.io/23f420f929e0e09c39d916b8aaa166fb.geojson // a rough estamate of the country borders.
-     * @param {String} geoJsonLink 
-     * @param {Object} options Optional. Options for the request.
-     */
-    async getGeoJson(geoJsonLink, options) {
-        const response = await fetch(geoJsonLink).catch(e => {
-            console.log("Error", e);
-          }); // get the geojson file.
-        const data = await response.json(); // parse the json file.
-        const result = L.geoJson(data, options); // create a L.geoJson object from the parsed json file.
-        return result; // return the geoJson object.
-    }
-    
-    createDropDownSelectChart(){
-        const dropdown = new LeafletDropDown({position: "topleft"}, WORLD_MAPS, DEFAULT_CHART); // create a new dropdown menu
-        const self = this; // save the controller in a variable
 
-        // create a function that will be called when a new chart is selected
-        const onSelectNewChart = function(e){ 
-            self.addWorldMap(e.target.value);   // add the new chart
-        }
-        dropdown.onChange = onSelectNewChart; // set the onChange event for the dropdown. This will be called when the user selects a new chart.
-        dropdown.addTo(this.map);
-    }
     createUI(){
-        // create the Dropdown menu for selecting a chart
-        // uncomment this if you want to use the dropdown menu. 
-        // this.createDropDownSelectChart(); //Maps can currently be chosen in the layerController in this.createLayerController() 
 
         // Add the layer controller to the map. This will allow the user to switch between Layers.
-        // This creates the button and the dropdown menu. Docs: (https://leafletjs.com/examples/layers-control/)
-        this.leafletLayerController = this.createLayerController();
-        this.leafletLayerController.addTo(this.map);
+        // This creates the button. Docs: (https://leafletjs.com/examples/layers-control/)
+        const leafletLayerController = this.createLayerController();
+        leafletLayerController.addTo(this.map);
+
+        // TODO: add async GeoJson layers to the map. Requires a NodeJS server.
 
         // create a button to zoom in on current location
         const buttonZoomInOnCurrLocation = this.createButtonZoomInOnCurrLocation();
         buttonZoomInOnCurrLocation.addTo(this.map);
 
+        // create the drawTool. This will allow the user to draw on the map.
+        const drawTool = new DrawTool(this.map);
     }
     createLayerController(){
-        // create a new layer controller.
-        const layerController = L.control.layers(); 
         
-        this.addTileLayer(layerController); // add the tile layers to the layer controller.
-        
+        // create a new layer controller. docs: https://github.com/davicustodio/Leaflet.StyledLayerControl
+        const baseMaps = GROUPED_WORLD_MAPS; // add the default map to the layer controller.
+        const overlays = {}; // create an empty array for the overlays.
+        const options = {
+            container_width 	: "300px",
+            container_maxHeight : "800px", 
+            group_maxHeight     : "800px",
+            exclusive       	: false
+        };
+        const layerController = L.Control.styledLayerControl(baseMaps, overlays, options);
+        layerController.options.group_togglers.show = false; // Needs some work before its enabled. Current function closes all groups on use.
+        this._leafletLayerController = layerController;
         return layerController;
     }
+
     /**
-     * Adds tile layers as a option. Used to add choises for world maps.
-     * @param {TileLayer} layerController 
-     * @returns 
+     * add a single data layer to the map.
+     * @param {L.Control.layer()} layer
+     * @param {string} displayName 
+     * @param {string} grpName the group name of the layer. This is used to group the layers.
      */
-    addTileLayer(layerController){
-        // add all the maps and mapnames to the layer controller.
-        const mapNames = this.mapData.getAllPosibleMapKeys();
-        const maps = this.mapData.getAllPosibleMaps();
-
-        // check if the output length of mapNames and maps is the same.
-        if(mapNames.length !== maps.length){
-            console.error('The length of the mapNames and maps arrays are not the same.');
-            return;
-        }
-
-        // add all the maps to the layer controller.
-        for(let i = 0; i < maps.length; i++){
-            const map = maps[i];
-            const mapName = mapNames[i];
-            layerController.addBaseLayer(map, mapName);
+    addDataLayer(layer){
+        const displayName = layer.displayName;
+        const groupName = layer.groupName;
+        
+        const overlayOptions = {
+            groupName : groupName,
+            expanded:true
+        }        
+        const llc = this.leafletLayerController.addOverlay(layer.layer, displayName, overlayOptions);
+        if(layer.checked){
+            llc.selectLayer(layer.layer); // check the layer in layer controller menu. This will add it to the map.
         }
     }
-    getAllPossibleDataLayers(){
-        const result = [];
-        const keys = Object.keys(LAYER_DATA);
-        for (let i = 0; i < keys.length; i++) {
-            const currDataLayer = keys[i];
-            result.push(LAYER_DATA[currDataLayer]);
+    addDataLayers(dataLayers){
+        for(let i = 0; i < dataLayers.length; i++){
+            const currDataLayer = dataLayers[i];
+            this.addDataLayer(currDataLayer);
         }
-        return result;
     }
 
-    addDataLayer(dataLayer, displayName){
-        this.leafletLayerController.addOverlay(dataLayer, displayName);
-    }
-    addDataLayerGroups(dataLayerGroups){
-        const keys = Object.keys(dataLayerGroups);
-        for(let i = 0; i < keys.length; i++){
-            const key = keys[i];
-            const layerGroup = dataLayerGroups[key];
-            this.addDataLayerGroup(layerGroup);
+    addAsyncDataLayers(dataLayers){
+        for(let i = 0; i < dataLayers.length; i++){
+            const currDataLayer = dataLayers[i];
+            this.addAsyncDataLayer(currDataLayer);
         }
     }
-    addDataLayerGroup(layerGroup){
-        const layer = layerGroup.layer;
-        const displayName = layerGroup.displayName;        
-        this.leafletLayerController.addOverlay(layer, displayName);
+    addAsyncDataLayer(dataLayer){
+        const result = dataLayer;
+        const promiseGeoJson = ImportController.getAsyncGeoJson(dataLayer.url, dataLayer.options);
+        promiseGeoJson.then(data => {
+            result.layer = data;
+            this.addDataLayer(result);
+        })
+        
     }
+
     createButtonZoomInOnCurrLocation(){
 
         const button = new LeafletButton({
@@ -139,6 +116,7 @@ class LeafletMapController{
         button.onClick = zoomInOnUserLocation; // set the onClick event for the button. This will be called when the button is clicked.
         return button;
     }
+    
     set leafletLayerController(value){
         this._leafletLayerController = value;
     }

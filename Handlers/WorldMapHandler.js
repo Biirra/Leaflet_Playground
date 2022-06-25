@@ -1,4 +1,4 @@
-const DEFAULT_CHART = 'Dark';
+const DEFAULT_CHART = 'Satellite';
 const DEFAULT_ZOOM_LEVEL = 13;
 const DEFAULT_COORDINATES = [52.704475, 5.753059];
 
@@ -37,7 +37,9 @@ const WORLD_MAPS = {
         id: 'mapbox/dark-v10',
         tileSize: 512,
         zoomOffset: -1,
-        accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA'
+        accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA',
+        groupName : "Mapbox Maps", 
+        expanded: true
     }),
     "Light": L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -49,3 +51,18 @@ const WORLD_MAPS = {
         accessToken: 'pk.eyJ1IjoiYmlpcnJhIiwiYSI6ImNrd3drY3Q5NDA0eW8ycHF0dmM3MDgwMWQifQ.2tw1EgExPnfO6KDcbqyqpA'
     })
 };
+
+const GROUPED_WORLD_MAPS = [
+    {
+        groupName : "Mapbox Maps",
+        expanded : true,
+        layers    : {
+            "Satellite": WORLD_MAPS.Satellite,
+            "Streets": WORLD_MAPS.Streets,
+            "Outdoors": WORLD_MAPS.Outdoors,
+            "Dark": WORLD_MAPS.Dark,
+            "Light": WORLD_MAPS.Light
+        }
+
+    }
+];

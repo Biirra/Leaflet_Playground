@@ -10,7 +10,6 @@ class AssetController{
 
         // get prepared leaflet layer data from assets.
         this.leafletLayerData = this.getPrepairedLeafletLayerData(this.assets);
-        DebugHandler.log(`AssetController.init: leafletLayerData added to controller.`, this._leafletLayerData);
     }
 
     /**
@@ -38,26 +37,20 @@ class AssetController{
     }
     getPrepairedLeafletLayerData(inputAssets){
         const assets = inputAssets;
-        const result = {};
+        const result = [];
 
+        // create leaflet layer data for each asset.
         for(let i = 0; i < assets.length; i++){
-            const asset = assets[i];
-
-            if(!asset.layerGroupId) continue; // check if asset has a layerId. if not, skip asset.
-
-            
-            // create a leaflet layer group for layerId if it does not exist.
-            if(!result[asset.layerGroupId]){
-                result[asset.layerGroupId] = {
-                    layer: L.layerGroup(),
-                    displayName: asset.layerGroupId
-                };
-            }
-
-            const leafletMarker = this.createLeafletMarker(asset); // create a leaflet market for asset
-            result[asset.layerGroupId].layer.addLayer(leafletMarker); // add leaflet marker to layer group
+            const currAsset = assets[i];
+            // generate desired result to be used by the map controller.
+            const resultItem = {
+                layer: this.createLeafletMarker(currAsset), // for now we use a marker.
+                displayName: currAsset.displayName,
+                groupName: currAsset.groupName,
+                checked: currAsset.checked,
+            };
+            result.push(resultItem);
         }
-
         return result;
     }
     createLeafletMarker(asset){
@@ -83,20 +76,20 @@ class AssetController{
     }
     validateAssetData(asset){
         let isValid = true;
-        if(!asset.name){
-            DebugHandler.error(`AssetController.validateAssetData: asset has no name.`, asset);
+        if(!asset.displayName){
+            DebugHandler.error(`AssetController.validateAssetData: asset has no displayName.`, asset);
             isValid = false;
         }
         if(!asset.type){
             DebugHandler.error(`AssetController.validateAssetData: asset has no type.`, asset);
             isValid = false;
         }
-        if(!asset.location){
-            DebugHandler.error(`AssetController.validateAssetData: asset has no location.`, asset);
+        if(!asset.latlang){
+            DebugHandler.error(`AssetController.validateAssetData: asset has no latlang.`, asset);
             isValid = false;
         }
-        if(!asset.layerGroupId){
-            DebugHandler.error(`AssetController.validateAssetData: asset has no layerGroupId.`, asset);
+        if(!asset.groupName){
+            DebugHandler.error(`AssetController.validateAssetData: asset has no groupName.`, asset);
             isValid = false;
         }
         return isValid;

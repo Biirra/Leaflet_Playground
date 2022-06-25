@@ -7,8 +7,10 @@ class MapLeaflet{
             // docs: https://www.tutorialspoint.com/leafletjs/leafletjs_controls.htm#:~:text=Zoom%20%E2%88%92%20By%20default%2C%20this%20control,the%20map%20options%20to%20false.
             // zoomControl: false, // remove the zoom control
             // attributionControl: false   // remove the attribution control
+            // drawControl: true, // add the draw control
          }
         this._map = L.map(domId, mapOptions);
+
     }
     getMapByName(name){
         return WORLD_MAPS[name];
