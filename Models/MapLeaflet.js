@@ -6,8 +6,8 @@ class MapLeaflet{
             // turned off because this should exist in a config file.
             // docs: https://www.tutorialspoint.com/leafletjs/leafletjs_controls.htm#:~:text=Zoom%20%E2%88%92%20By%20default%2C%20this%20control,the%20map%20options%20to%20false.
             // zoomControl: false, // remove the zoom control
-            // attributionControl: false   // remove the attribution control
-            // drawControl: true, // add the draw control
+            // attributionControl: false,   // remove the attribution control
+            drawControl: false, // is added to the map by the LeafletMapController.
          }
         this._map = L.map(domId, mapOptions);
 

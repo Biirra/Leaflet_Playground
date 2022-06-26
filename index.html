@@ -90,6 +90,7 @@
         <script src="Models/Country.js"></script>
         <script src="Models/Location.js"></script>
         
+        <script src="Models/LayerControl.js"></script>
         <script src="Models/DrawTool.js"></script>
         <script src="Models/LeafletButton.js"></script>
         <script src="Models/MapLeaflet.js"></script>
@@ -120,8 +121,7 @@
         <script>
             
             // Create the GIS application
-            const map = new MapLeaflet("map");//
-            const mapController = new ApplicationController(map);
+            const application = new ApplicationController(map);
 
         </script>
     </body>

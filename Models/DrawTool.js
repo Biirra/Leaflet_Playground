@@ -3,8 +3,8 @@ const DRAW_TOOL_OPTIONS = {
     draw: {
         polyline: {
             shapeOptions: {
-                color: '#f357a1',
-                weight: 10
+                color: '#FF44FF',
+                weight: 4
             }
         },
         polygon: {
@@ -17,14 +17,11 @@ const DRAW_TOOL_OPTIONS = {
                 color: '#bada55'
             }
         },
-        circle: true, // Turns off this drawing tool
-        rectangle: {
-            shapeOptions: {
-                clickable: true
-            }
-        },
+        rectangle: false, // Turns off this drawing tool
+        circle: false, // Turns off this drawing tool
+        circlemarker: false, // Turns off this drawing tool
         marker: {
-            icon: LEAFLET_ICONS.ITEM
+            icon: LEAFLET_ICONS.ITEM // Custom icon for markers
         }
         },
         edit: {
@@ -35,7 +32,7 @@ const DRAW_TOOL_OPTIONS = {
 
 class DrawTool{
     _map;
-    _editableLayers;
+    _editableLayerGroup;
     _drawControl;
     _options;
     constructor(map, options = DRAW_TOOL_OPTIONS){
@@ -44,39 +41,59 @@ class DrawTool{
         this.init();
     }
     init(){
-        this.createEditableLayers();
-        this.createDrawControl();
-        this.addListeners();
+        this.createEditableLayerGroup(); //create editableLayerGroup to add drawn layers to.
+        this.createDrawControl(); //create drawControl and add it to map 
+        this.addListeners(); //add listeners to map to listen for draw events
     }
-    createEditableLayers(){
-        this.editableLayers = new L.FeatureGroup();
-        this.options.edit.featureGroup = this.editableLayers;
-        this.map.addLayer(this.editableLayers);
+    createEditableLayerGroup(){
+        this._editableLayerGroup = new L.FeatureGroup(); //create editableLayerGroup to add drawn layers to.
+        this.options.edit.featureGroup = this.editableLayerGroup; //set drawControl options to use this group.
+        this.map.addLayer(this.editableLayerGroup); //add editableLayerGroup to map.
     }
     createDrawControl(){
-        this.drawControl = new L.Control.Draw(this.options);
-        this.map.addControl(this.drawControl);
+        this.drawControl = new L.Control.Draw(this.options); //create drawControl. this is the control that will be added to map.
+        this.map.addControl(this.drawControl); //add drawControl to map.
+    }
+    addEditableLayers(layers){
+        for(let i = 0; i < layers.length; i++){ 
+            const layer = layers[i]; 
+            this.addEditableLayer(layer); 
+        }
+    }
+    addEditableLayer(layer){
+        this.drawControl.options.edit.featureGroup.addLayer(layer.layer); //add layer to editableLayerGroup. so it can be edited.
+        
     }
     addListeners(){
-        const addPopupOnMarker = (e) => {
-            const type = e.layerType;
-            const layer = e.layer;    
-            console.log(type);
-            console.log(layer.toGeoJSON());
-            if (type === 'marker') {
-                //layer.bindPopup('A popup!');
-            }
-            layer.bindPopup('A popup!');
-            this.editableLayers.addLayer(layer);
-        }
-        this.map.on('draw:created', addPopupOnMarker.bind(this));
+        
+        this.map.on('draw:created', this.onDrawCreated.bind(this)); //add listener to map to listen for draw events and call onDrawCreated when a draw is created.
 
-        this.map.on('draw:edited', function (e) {
-            var layers = e.layers;
-            layers.eachLayer(function (layer) {
-                //do whatever you want; most likely save back to db
-            });
+        this.map.on('draw:edited', this.onDrawEdited.bind(this)); //add listener to map to listen for draw events and call onDrawEdited when a draw is edited.
+
+        this.map.on('draw:deleted', this.onDrawDeleted.bind(this)); //add listener to map to listen for draw events and call onDrawDeleted when a draw is deleted.
+    }
+    onDrawDeleted(e){
+        const layers = e.layers;
+        layers.eachLayer(function (layer) {
+            DebugHandler.log('DrawTool', 'draw:deleted', layer);
+            //do whatever you want; most likely save back to db
         });
+    }
+    onDrawEdited(e){
+        const layers = e.layers;
+        layers.eachLayer(function (layer) {
+            DebugHandler.log('DrawTool', 'draw:edited', layer);
+            //do whatever you want; most likely save back to db
+        });
+    }
+    onDrawCreated(e){
+        const type = e.layerType;
+        const layer = e.layer;    
+        DebugHandler.log('DrawTool', 'draw:created', type, layer);
+        
+        
+        layer.bindPopup('A popup!'); //bind popup to layer.
+        this.editableLayerGroup.addLayer(layer); //add layer to editableLayerGroup. so it can be edited.
     }
     set map(value){
         this._map = value;
@@ -84,11 +101,11 @@ class DrawTool{
     get map(){
         return this._map;
     }
-    get editableLayers(){
-        return this._editableLayers;
+    get editableLayerGroup(){
+        return this._editableLayerGroup;
     }
-    set editableLayers(value){
-        this._editableLayers = value;
+    set editableLayerGroup(value){
+        this._editableLayerGroup = value;
     }
     get drawControl(){
         return this._drawControl;

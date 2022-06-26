@@ -6,7 +6,7 @@ const MOCK_DATA = {
             groupName: "mock-group-1",
             visible: true,
             addedToMap: true,
-            latlang:  [ "51.2", "5.1" ]
+            latlang:  [ "53.2", "5.1" ]
         },
         {
             displayName: "mock-asset-2",
@@ -14,7 +14,7 @@ const MOCK_DATA = {
             groupName: "mock-group-1",
             visible: true,
             addedToMap: true,
-            latlang:  [ "51.2", "5.1" ]
+            latlang:  [ "59.2", "5.1" ]
         },
         {
             displayName: "mock-asset-3",
@@ -40,7 +40,7 @@ const MOCK_DATA = {
             
             visible: true,
             addedToMap: true,
-            latlang:  [ "51.2", "5.1" ]
+            latlang:  [ "51.3", "5.1" ]
         },
         {
             displayName: "mock-asset-6",
@@ -49,7 +49,7 @@ const MOCK_DATA = {
             checked: true,
             visible: true,
             addedToMap: true,
-            latlang:  [ "51.2", "5.1" ]
+            latlang:  [ "51.86", "5.1" ]
         },
         {
             displayName: "mock-asset-7",
@@ -57,7 +57,7 @@ const MOCK_DATA = {
             groupName: "mock-group-2",
             visible: true,
             addedToMap: true,
-            latlang:  [ "51.2", "5.1" ]
+            latlang:  [ "51.124", "5.1" ]
         },
         {
             displayName: "mock-asset-8",
@@ -65,7 +65,7 @@ const MOCK_DATA = {
             groupName: "mock-group-2",
             visible: true,
             addedToMap: true,
-            latlang:  [ "51.2", "5.1" ]
+            latlang:  [ "51.624", "5.1" ]
         },
         {
             displayName: "mock-asset-9",
@@ -73,7 +73,7 @@ const MOCK_DATA = {
             groupName: "mock-group-2",
             visible: true,
             addedToMap: true,
-            latlang:  [ "51.2", "5.1" ]
+            latlang:  [ "51.1236", "5.1" ]
         },
         {
             displayName: "mock-asset-10",
@@ -81,7 +81,7 @@ const MOCK_DATA = {
             groupName: "mock-group-2",
             visible: true,
             addedToMap: true,
-            latlang:  [ "51.2", "5.1" ]
+            latlang:  [ "56.2", "5.1" ]
         }
     ]
 }

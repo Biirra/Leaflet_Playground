@@ -1,10 +1,11 @@
 class Asset {
-    _groupName;
-    _displayName;
+    _groupName; // the name of the group the asset belongs to.
+    _displayName; 
     _coordinates; // the coordinates of the asset in leaflet.
     _checked; // Asset is checked in the map controller
     _extendedData = {}; // attributes that are not part of the data model but are used by the application.
     _icon = LEAFLET_ICONS.ITEM;
+    _popup = null;
     constructor(){
 
     }
@@ -12,16 +13,14 @@ class Asset {
         return 'This item has no function.';
     }
     setData(data){
-        this._groupName = data.groupName ? data.groupName : null;
-        this._displayName = data.displayName ? data.displayName : null;
-        this._coordinates = data.latlang ? new Coordinates(data.latlang) : null;
-        this._checked = data.checked ? data.checked : false;
-        this._extendedData = data.extendedData ? data.extendedData : {};
-        this._icon = data.icon ? data.icon : LEAFLET_ICONS.ITEM;
+        this._groupName = data.groupName ? data.groupName : null; // groupName is required. 
+        this._displayName = data.displayName ? data.displayName : null; // displayName is required.
+        this._coordinates = data.latlang ? new Coordinates(data.latlang) : null; // latlang is required.
+        this._checked = data.checked ? data.checked : false; // checked is optional.
+        this._extendedData = data.extendedData ? data.extendedData : {}; // extendedData is optional.
+        this._icon = data.icon ? data.icon : LEAFLET_ICONS.ITEM; // icon is optional.
 
     }
-
-    
     get groupName(){
         return this._groupName;
     }
@@ -63,5 +62,11 @@ class Asset {
     }
     get coordinates() {
         return this._coordinates;
+    }
+    get popup(){
+        return this._popup;
+    }
+    set popup(popup){
+        this._popup = popup;
     }
 }
