@@ -4,14 +4,14 @@ class ApplicationController {
     _mapController;
 
 
-    _assetController;
+    _itemController;
     constructor() {
         
         this._mapLeaflet = new MapLeaflet("map");
         this._map = this.mapLeaflet.map;
 
         this._mapController = new LeafletMapController(this.mapLeaflet);
-        this._assetController = new AssetController();
+        this._itemController = new DataItemController();
 
         this.init();
     }
@@ -21,16 +21,10 @@ class ApplicationController {
         this.mapLeaflet.changeWorldMap(DEFAULT_CHART); // add a map so there is always a map selected.
 
         // add leafletDataLayers to the mapController
-        this.mapController.layerControl.addDataLayers(this.assetController.dataLayers);
+        this.mapController.layerControl.addDataLayers(this.itemController.dataItems);
 
         // add async data layers to the mapController. Done at top level to avoid CORS issues.
         this.mapController.layerControl.addAsyncDataLayers(LAYER_DATA);
-
-        
-        // get gejson from local folder using import controller. CORS issues.
-        // const geojson = ImportController.getGeoJsonFromLocal("assets/countries.geojson");
-        // console.log(geojson)
-
         
     }
 
@@ -47,11 +41,11 @@ class ApplicationController {
         this._mapLeaflet = mapLeaflet;
     }
 
-    set assetController(assetController) {
-        this._assetController = assetController;
+    set itemController(itemController) {
+        this._itemController = itemController;
     }
-    get assetController() {
-        return this._assetController;
+    get itemController() {
+        return this._itemController;
     }
     set mapController(mapController) {
         this._mapController = mapController;

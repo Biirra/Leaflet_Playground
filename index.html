@@ -89,16 +89,17 @@
 
         <script src="Models/Country.js"></script>
         <script src="Models/Location.js"></script>
+        <script src="Models/DataItem.js"></script>
         
         <script src="Models/LayerControl.js"></script>
         <script src="Models/DrawTool.js"></script>
         <script src="Models/LeafletButton.js"></script>
         <script src="Models/MapLeaflet.js"></script>
-        <script src="Models/Asset.js"></script>
+        
         
         <script src="Controllers/LeafletMapController.js"></script>
         <script src="Controllers/ImportController.js"></script>
-        <script src="Controllers/AssetController.js"></script>
+        <script src="Controllers/DataItemController.js"></script>
         
         <script src="Controllers/ApplicationController.js"></script>
 
@@ -121,7 +122,7 @@
         <script>
             
             // Create the GIS application
-            const application = new ApplicationController(map);
+            const application = new ApplicationController();
 
         </script>
     </body>

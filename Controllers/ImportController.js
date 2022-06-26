@@ -1,11 +1,11 @@
 
 
 class ImportController{
-    // retrieve a single asset from a outside source.
-    static getAsset(assetId){
+    // retrieve a single item from a outside source.
+    static getAsset(itemId){
         const mock_data = MOCK_DATA.assets;
         for(let i = 0; i < mock_data.length; i++){
-            if(mock_data[i].name === assetId){
+            if(mock_data[i].name === itemId){
                 return mock_data[i];
             }
         }
