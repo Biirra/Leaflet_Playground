@@ -1,18 +1,21 @@
 
+/**
+ * The import controller is responsible to convert external data to data that the application can use.
+ */
 
 class ImportController{
     // retrieve a single item from a outside source.
-    static getAsset(itemId){
-        const mock_data = MOCK_DATA.assets;
+    static getMockDataItem(itemId){
+        const mock_data = MOCK_DATA.items;
         for(let i = 0; i < mock_data.length; i++){
-            if(mock_data[i].name === itemId){
+            if(mock_data[i].itemId === itemId){
                 return mock_data[i];
             }
         }
         return null;
     }
-    static getAllAssets(){
-        return MOCK_DATA.assets;
+    static getAllMockDataItems(){
+        return MOCK_DATA.items;
     }
 
     /**

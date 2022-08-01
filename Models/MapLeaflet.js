@@ -43,44 +43,6 @@ class MapLeaflet{
         }
         return result;
     }
-    setPopup(latlng, msg = '') {
-        const popup = L.popup({
-            closeOnClick: false,
-            autoClose: false
-          });
-        popup.setLatLng(latlng)
-            .setContent(msg)
-            .openOn(this.map);
-    }
-    setMarker(latlng, obj, onClick){
-        // Creating a marker 
-        const marker = L.marker();
-        if(obj?.icon) marker.setIcon(obj.icon);
-
-        if(obj){
-            const map = this.map;
-            this.map.on('zoomend', function() {
-                if(!obj.existsInMap) return;
-                
-                if (map.getZoom() < obj.coordinates.alt)
-                    marker.remove();
-                else 
-                    marker.addTo(map);
-            });
-        }
-        // Adding marker to the map
-        marker.setLatLng(latlng);
-
-        if(onClick){
-            // applying onclick functionality
-            marker.on('click', () => {
-                onClick();
-            });
-        } 
-    }
-    onMapClick(e) {
-        this.setMarker(e.latlng);
-    }
     get map(){
         return this._map;
     }

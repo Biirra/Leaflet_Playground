@@ -65,6 +65,9 @@
             }
 
         </style>
+
+        
+        <link rel="stylesheet" href="Models/LeafletSearchBar.css">
         
         <script>
             Object.defineProperty(String.prototype, 'capitalize', {
@@ -74,8 +77,6 @@
                 enumerable: false
             });
         </script>
-
-        
 
         <script src="Config/ApplicationConfig.js"></script>
 
@@ -91,6 +92,7 @@
         <script src="Models/Location.js"></script>
         <script src="Models/DataItem.js"></script>
         
+        <script src="Models/LeafletSearchBar.js"></script>
         <script src="Models/LayerControl.js"></script>
         <script src="Models/DrawTool.js"></script>
         <script src="Models/LeafletButton.js"></script>
@@ -103,10 +105,9 @@
         
         <script src="Controllers/ApplicationController.js"></script>
 
+        <script src="Views/DataItemView.js"></script>
         <script src="Views/BS_ModelView.js"></script>
 
-
-        
     </head>
     <body>
         <div id="calc-modal-holder"></div>
@@ -120,9 +121,9 @@
         </div>
         
         <script>
-            
             // Create the GIS application
             const application = new ApplicationController();
+            //application.loadMockData();
 
         </script>
     </body>

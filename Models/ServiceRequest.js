@@ -1,3 +1,3 @@
-class ServiceRequest {
+class ServiceRequest extends DataItem{
     
 }

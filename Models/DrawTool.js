@@ -62,7 +62,6 @@ class DrawTool{
     }
     addEditableLayer(layer){
         this.drawControl.options.edit.featureGroup.addLayer(layer.layer); //add layer to editableLayerGroup. so it can be edited.
-        
     }
     addListeners(){
         
@@ -90,9 +89,10 @@ class DrawTool{
         const type = e.layerType;
         const layer = e.layer;    
         DebugHandler.log('DrawTool', 'draw:created', type, layer);
+
+        const dataItem = DataItemController.createNewItem(layer);
+        console.log(dataItem);
         
-        
-        layer.bindPopup('A popup!'); //bind popup to layer.
         this.editableLayerGroup.addLayer(layer); //add layer to editableLayerGroup. so it can be edited.
     }
     set map(value){

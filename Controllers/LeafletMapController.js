@@ -28,6 +28,16 @@ class LeafletMapController{
         // create the drawTool. This will allow the user to draw on the map.
         this._drawTool = new DrawTool(this.map);
         // drawTool.addEditableLayers(leafletDataLayers);
+
+
+        const searchBarOptions = {
+            position: 'topright',
+            textPlaceholder: 'SR100001...',
+
+        }
+        // create the searchbar
+        const searchbar = new SearchBar(searchBarOptions);
+        searchbar.addTo(this.map);
     }
 
     

@@ -1,3 +1,3 @@
-class WorkOrder {
+class WorkOrder extends DataItem{
     
 }
